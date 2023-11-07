@@ -184,7 +184,6 @@ async function selectRole(windowsBot){
         process.exit()
     }
 
-
     let x = 600
     let y = 545
 
@@ -208,10 +207,7 @@ async function selectRole(windowsBot){
 
     console.log('start')
 
-    await windowsBot.clickMouse(hwnd, 1080, 1165, 1);
-    await windowsBot.sleep(150);
-    await windowsBot.clickMouse(hwnd, 1080, 1165, 1);
-
+    await windowsBot.clickMouse(hwnd, 649, 756, 1);
 
     // await windowsBot.sendVk(keyMap.space, 1);
     // await windowsBot.sleep(2000);
@@ -235,13 +231,13 @@ async function getCurrentHwnd(windowsBot){
 
 async function ifNoplNew(windowsBot){
  
-    let color =  await windowsBot.getColor(hwnd, utils.getPosX(1504), utils.getPosY(1194), false);
+    let color =  await windowsBot.getColor(hwnd, utils.getPosX(config.PLPOS.x), utils.getPosY(config.PLPOS.y), false);
     // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\pass-room1.png', { sim: 0.8 })
     console.log('检测是否没疲劳', color)
     await windowsBot.sleep(200);
     // if(!color.startsWith('#d3af00')){ 
 
-    if(!(color.startsWith('#d4a') || color.startsWith('#001'))){
+    if(!(color.startsWith('#dec') || color.startsWith('#001'))){
         console.log('颜色判断没pl了')
         //ocr再次确认
         let ocrResult= await ifNoplOCR(windowsBot)
@@ -272,14 +268,19 @@ async function ifNoplOCR(windowsBot){
     // let x1 = utils.getPosX(1545)
     // let y1 = utils.getPosY(1175)
 
-    let x = utils.getPosX(1595)
-    let y = utils.getPosY(1184)
-    let x1 = utils.getPosX(1653)
-    let y1 = utils.getPosY(1204)
+
+    
+    let x = utils.getPosX(1091)
+    let y = utils.getPosY(733)
+    let x1 = utils.getPosX(1149)
+    let y1 = utils.getPosY(752)
 
     // await windowsBot.moveMouse(hwnd, utils.getPosX(1488) , utils.getPosY(1196), options = {});
     // await windowsBot.clickMouse(hwnd, 1479 , 1204, 1, options = {});
     // await windowsBot.sleep(1000)
+
+    await windowsBot.moveMouse(hwnd, 1076, 780, options = {});
+    await windowsBot.sleep(500)
 
     //截图保存
     let saveRes = await windowsBot.saveScreenshot(hwnd, path , {region:[x,y,x1,y1]});
@@ -292,6 +293,7 @@ async function ifNoplOCR(windowsBot){
         if(ret.data.text){
             let pl = ret.data.text.split('/')[0]
             if(pl > 0){
+                console.log('还有疲劳')
                 return false
             }else{
                 if(pl==0){
@@ -315,9 +317,8 @@ async function toMap(windowsBot){
     console.log('---------tomap--------')
 
     console.log('关闭公告')
-    await windowsBot.clickMouse(hwnd, 1075, 808, 1);
+    await windowsBot.clickMouse(hwnd, 681, 521, 1);
     await windowsBot.sleep(500);
-
 
     let result =  await ifNoplNew(windowsBot)
 
@@ -343,13 +344,13 @@ async function toMap(windowsBot){
     console.log('select map haibolun')
     await windowsBot.sleep(1000);
 
-    await windowsBot.clickMouse(hwnd, 933, 604, 1);
+    await windowsBot.clickMouse(hwnd, 526, 318, 1);
     await windowsBot.sleep(500);
 
 
     console.log('进图');
 
-    await windowsBot.clickMouse(hwnd, 933, 604, 1);
+    await windowsBot.clickMouse(hwnd, 526, 318, 1);
     await windowsBot.sleep(2000);
 
     // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\emeng1.png', { sim: 0.8 })
@@ -404,11 +405,12 @@ async function backTown(windowsBot){
     await windowsBot.sendVk(keyMap.esc, 1);
     await windowsBot.sleep(500); 
 
-    let color =  await windowsBot.getColor(hwnd, utils.getPosX(1234),utils.getPosY(1060), false);
+    let color =  await windowsBot.getColor(hwnd, utils.getPosX(769),utils.getPosY(673), false);
+    console.log('backtowncolor',color)
     if(color!=='#3d88aa'){
         await windowsBot.sendVk(keyMap.esc, 1);
         await windowsBot.sleep(500); 
-        let color1 =  await windowsBot.getColor(hwnd, utils.getPosX(1234),utils.getPosY(1060), false);
+        let color1 =  await windowsBot.getColor(hwnd, utils.getPosX(769),utils.getPosY(673), false);
         if(color1!=='#3d88aa'){
             await windowsBot.sendVk(keyMap.esc, 1);
             await windowsBot.sleep(500); 
@@ -418,7 +420,7 @@ async function backTown(windowsBot){
     await windowsBot.clickMouse(hwnd, config.backTownPos.x, config.backTownPos.y, 1);
     await windowsBot.sleep(1000);
 
-    await windowsBot.clickMouse(hwnd, 1024, 748, 1);
+    await windowsBot.clickMouse(hwnd, 598, 427, 1);
     await windowsBot.sleep(500);
 
     console.log('兼容虚弱')
@@ -1227,7 +1229,7 @@ async function handleError(windowsBot,msg){
     }
 
     // await windowsBot.clickMouse(qqhwnd, 2520, 733, 1);
-    await windowsBot.clickMouse(qqhwnd, 738 + 270, 542 + 220, 1);
+    await windowsBot.clickMouse(qqhwnd, 351 + 270, 1196 + 220, 1);
     await windowsBot.sleep(500);
     // await windowsBot.sendVk(keyMap.x, 1);
     // await windowsBot.sleep(500);
@@ -1268,13 +1270,13 @@ async function handleError(windowsBot,msg){
     console.log('select map haibolun')
     await windowsBot.sleep(1000);
 
-    await windowsBot.clickMouse(hwnd, 933, 604, 1);
+    await windowsBot.clickMouse(hwnd, 526, 318, 1);
     await windowsBot.sleep(500);
 
 
     console.log('进图');
 
-    await windowsBot.clickMouse(hwnd, 933, 604, 1);
+    await windowsBot.clickMouse(hwnd, 526, 318, 1);
     await windowsBot.sleep(2000);
 
 
@@ -1296,8 +1298,12 @@ async function test(windowsBot) {
 
     console.log('-------startTest--------')
 
+    await exitToRole(windowsBot)
+    // await utils.findEnd(windowsBot, hwnd, new Date, 10000)
 
-    await handleError(windowsBot,'测试错误')
+    // await ifNoplOCR(windowsBot)
+    // await ifNoplNew(windowsBot)
+    // await handleError(windowsBot,'测试错误')
 
     // let endResult = await utils.doUntilEnd(windowsBot,hwnd,5000,async ()=>{
 

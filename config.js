@@ -4,15 +4,18 @@ const keyMap = require('./keyMap.js')
 
 module.exports = {
     WINDOW_NAME: '地下城与勇士：创新世纪',
-    WINDOW_WIDTH: 1600,
-    WINDOW_HEIGHT: 1000,
-    WINDOW_TOP: 220,
-    WINDOW_LEFT: 271,
+    WINDOW_WIDTH: 1280,
+    WINDOW_HEIGHT: 800,
+    WINDOW_TOP: 0,
+    WINDOW_LEFT: 0,
 
+    PLPOS:{
+        x:985,
+        y:778,
+    },
 
-
-    changeRolePos: { x: 1041, y: 1060 },
-    backTownPos: { x: 1230, y: 1066 },
+    changeRolePos: { x: 617, y: 675 },
+    backTownPos: { x: 769, y: 673 },
 
 
 
@@ -193,64 +196,80 @@ module.exports = {
 
     ROLE_POS: [{
         id: 1,
-        x: 615,
-        y: 550
+        x: 283,
+        y: 374
     }, {
         id: 2,
-        x: 844,
-        y: 570,
+        x: 466,
+        y: 374,
     }, {
         id: 3,
-        x: 1079,
-        y: 585,
+        x: 651,
+        y: 374,
     }, {
         id: 4,
-        x: 1320,
-        y: 580,
+        x: 846,
+        y: 374,
     }, {
         id: 5,
-        x: 1555,
+        x: 1035,
         y: 560,
     }, {
         id: 6,
-        x: 383,
-        y: 974,
+        x: 100,
+        y: 536,
     }, {
         id: 7,
-        x: 618,
-        y: 960,
+        x: 285,
+        y: 533,
     }, {
         id: 8,
-        x: 830,
-        y: 941,
+        x: 470,
+        y: 533,
     }, {
         id: 9,
-        x: 1040,
-        y: 941,
+        x: 655,
+        y: 533,
     }, {
         id: 10,
-        x: 1250,
-        y: 941,
+        x: 840,
+        y: 533,
     }, {
         id: 11,
-        x: 1515,
-        y: 941
+        x: 1020,
+        y: 533
     }, {
         id: 12,
-        x: 1734,
-        y: 941
-    }, {
+        x: 1190,
+        y: 533
+    },  {
         id: 13,
-        x: 383,
-        y: 974,
+        x: 100,
+        y: 536,
     }, {
         id: 14,
-        x: 618,
-        y: 960,
+        x: 285,
+        y: 533,
     }, {
         id: 15,
-        x: 830,
-        y: 941,
+        x: 470,
+        y: 533,
+    }, {
+        id: 16,
+        x: 655,
+        y: 533,
+    }, {
+        id: 17,
+        x: 840,
+        y: 533,
+    }, {
+        id: 18,
+        x: 1020,
+        y: 533
+    }, {
+        id: 19,
+        x: 1190,
+        y: 533
     }],
 
     ACCOUNT: {

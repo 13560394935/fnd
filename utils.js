@@ -183,12 +183,12 @@ async function ifPassRoom(windowsBot, hwnd, startTime, timeout) {
     if (time > timeout) return 2
 
     //1480 1155
-    let color = await windowsBot.getColor(hwnd, getPosX(884), getPosY(1165), false);
+    let color = await windowsBot.getColor(hwnd, getPosX(498), getPosY(774), false);
     // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\pass-room1.png', { sim: 0.8 })
     console.log('检测是否过图', color)
     await windowsBot.sleep(100);
     //#144
-    if (!color.startsWith('#165')) {
+    if (!color.startsWith('#144')) {
         return 1
     } else {
         return ifPassRoom(windowsBot, hwnd, startTime, timeout)
@@ -202,7 +202,7 @@ async function findCanNext(windowsBot, hwnd, startTime, timeout) {
 
     if (+new Date() - startTime > timeout) return 2
 
-    let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\can-next.png', { sim: 0.8 })
+    let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\can-next1.png', { sim: 0.8 })
     console.log('检测是否打完', res)
     await windowsBot.sleep(300);
     if (res) {
@@ -233,10 +233,10 @@ async function findEnd2(windowsBot, hwnd, startTime, timeout, confirm = 0) {
 
 
     await windowsBot.sleep(800);
-    console.log('color-02a9e6', color, 'color1-0241cb', color1, 'color2-0114cd', color2);
+    console.log('color-02b5e5', color, 'color1-0106d8', color1, 'color2-025ce7', color2);
 
 
-    if (color != '#02a9e5' && color1 != '#0341cb' && color2 != '#0114cd') {
+    if (color != '#02b5e5' && color1 != '#0106d8' && color2 != '#025ce7') {
         //确认判断到两次结束才确认为结束
         console.log('判断到结束了', confirm)
         confirm++
@@ -276,14 +276,14 @@ async function findEnd(windowsBot, hwnd, startTime, timeout, confirm = 0) {
         }
 
         console.log('zuo a ?')
-        let color = await windowsBot.getColor(hwnd, getPosX(1843), getPosY(309), false);
-        let color1 = await windowsBot.getColor(hwnd, getPosX(1843), getPosY(318), false);
-        let color2 = await windowsBot.getColor(hwnd, getPosX(1855), getPosY(305), false);
+        let color = await windowsBot.getColor(hwnd, getPosX(1258), getPosY(70), false);
+        let color1 = await windowsBot.getColor(hwnd, getPosX(1267), getPosY(67), false);
+        let color2 = await windowsBot.getColor(hwnd, getPosX(1258), getPosY(77), false);
 
         await windowsBot.sleep(800);
-        console.log('color-02a9e6', color, 'color1-0241cb', color1, 'color2-0114cd', color2);
+        console.log('color-02b5e5', color, 'color1-0106d8', color1, 'color2-025ce7', color2);
 
-        if (color !== '#02a9e5' && color1 !== '#0341cb' && color2 !== '#0114cd') {
+        if (color != '#02b5e5' && color1 != '#0106d8' && color2 != '#025ce7') {
             // 确认判断到两次结束才确认为结束
             console.log('jinlaile');
             console.log('判断到结束了', confirm);
