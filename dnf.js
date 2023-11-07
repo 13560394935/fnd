@@ -553,7 +553,7 @@ async function fightingStable(windowsBot){
             await windowsBot.sleep(100); 
             await windowsBot.sendVk(keyMap.x, 1);
             await windowsBot.sleep(100); 
-        }else if(capsLkCount >0 && capsLkCount < 30){
+        }else if(capsLkCount >15 && capsLkCount < 30){
             let second = (30 - capsLkCount)
             console.log(second+'秒后'+'capslk聚集物品')
             await windowsBot.sleep( second * 1000)
@@ -1217,7 +1217,7 @@ async function handleError(windowsBot,msg){
 
     await backTown(windowsBot)
 
-    await windowsBot.setClipboardText(msg);
+    await windowsBot.setClipboardText(currentRole.type + currentRole.id + ':' + msg);
 
     console.log('向QQ发送通知出错了');
     if(!qqhwnd){
