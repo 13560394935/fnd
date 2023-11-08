@@ -237,7 +237,7 @@ async function ifNoplNew(windowsBot){
     await windowsBot.sleep(200);
     // if(!color.startsWith('#d3af00')){ 
 
-    if(!(color.startsWith('#dec') || color.startsWith('#001'))){
+    if(!(color.startsWith('#dec') || color.startsWith('#002'))){
         console.log('颜色判断没pl了')
         //ocr再次确认
         let ocrResult= await ifNoplOCR(windowsBot)
@@ -317,7 +317,7 @@ async function toMap(windowsBot){
     console.log('---------tomap--------')
 
     console.log('关闭公告')
-    await windowsBot.clickMouse(hwnd, 681, 521, 1);
+    await windowsBot.clickMouse(hwnd, 647, 470, 1);
     await windowsBot.sleep(500);
 
     let result =  await ifNoplNew(windowsBot)
@@ -423,16 +423,16 @@ async function backTown(windowsBot){
     await windowsBot.clickMouse(hwnd, 598, 427, 1);
     await windowsBot.sleep(500);
 
-    console.log('兼容虚弱')
-    await windowsBot.clickMouse(hwnd, 1035, 795, 1);
-    await windowsBot.sleep(4000);
+    // console.log('兼容虚弱')
+    // await windowsBot.clickMouse(hwnd, 1035, 795, 1);
+    // await windowsBot.sleep(4000);
 
-    console.log('兼容虚弱契约恢复')
-    await windowsBot.clickMouse(hwnd, 1073, 804, 1);
-    await windowsBot.sleep(500);
+    // console.log('兼容虚弱契约恢复')
+    // await windowsBot.clickMouse(hwnd, 1073, 804, 1);
+    // await windowsBot.sleep(500);
 
-    await windowsBot.clickMouse(hwnd, 1126, 899, 1);
-    await windowsBot.sleep(500);
+    // await windowsBot.clickMouse(hwnd, 1126, 899, 1);
+    // await windowsBot.sleep(500);
 
 }
 
@@ -600,8 +600,18 @@ async function fightingStable(windowsBot){
         return
     }
 
+    await windowsBot.sendVk(keyMap.x, 1);
+
+    setTimeout(() => {
+         windowsBot.sendVk(keyMap.x, 1);   
+    }, 500);
+
+
     console.log('F10继续战斗')
     await windowsBot.sendVk(keyMap.f10, 1);
+
+
+
 
 
     
@@ -1229,11 +1239,11 @@ async function handleError(windowsBot,msg){
     }
 
     // await windowsBot.clickMouse(qqhwnd, 2520, 733, 1);
-    await windowsBot.clickMouse(qqhwnd, 351 + 270, 1196 + 220, 1);
+    await windowsBot.clickMouse(qqhwnd, 241, 315, 1);
     await windowsBot.sleep(500);
     // await windowsBot.sendVk(keyMap.x, 1);
     // await windowsBot.sleep(500);
-    // await windowsBot.sendVk(keyMap.enter, 1);
+    // await windowsBot.sendVk(keyMap.enter, 1);w
     // await windowsBot.sleep(200);
     // await windowsBot.sendVk(keyMap.enter, 1);
     // await windowsBot.sleep(200);
@@ -1298,12 +1308,12 @@ async function test(windowsBot) {
 
     console.log('-------startTest--------')
 
-    await exitToRole(windowsBot)
+    // await exitToRole(windowsBot)
     // await utils.findEnd(windowsBot, hwnd, new Date, 10000)
 
     // await ifNoplOCR(windowsBot)
     // await ifNoplNew(windowsBot)
-    // await handleError(windowsBot,'测试错误')
+    await handleError(windowsBot,'测试错误')
 
     // let endResult = await utils.doUntilEnd(windowsBot,hwnd,5000,async ()=>{
 
