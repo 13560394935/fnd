@@ -407,11 +407,13 @@ async function backTown(windowsBot){
 
     let color =  await windowsBot.getColor(hwnd, utils.getPosX(769),utils.getPosY(673), false);
     console.log('backtowncolor',color)
-    if(color!=='#3d88aa'){
+    if(color!=='#3782a4'){
         await windowsBot.sendVk(keyMap.esc, 1);
         await windowsBot.sleep(500); 
         let color1 =  await windowsBot.getColor(hwnd, utils.getPosX(769),utils.getPosY(673), false);
-        if(color1!=='#3d88aa'){
+        console.log('backtowncolor1',color1)
+
+        if(color1!=='#3782a4'){
             await windowsBot.sendVk(keyMap.esc, 1);
             await windowsBot.sleep(500); 
         }
@@ -423,16 +425,16 @@ async function backTown(windowsBot){
     await windowsBot.clickMouse(hwnd, 598, 427, 1);
     await windowsBot.sleep(500);
 
-    // console.log('兼容虚弱')
-    // await windowsBot.clickMouse(hwnd, 1035, 795, 1);
-    // await windowsBot.sleep(4000);
+    console.log('兼容虚弱')
+    await windowsBot.clickMouse(hwnd, 601, 454, 1);
+    await windowsBot.sleep(4000);
 
-    // console.log('兼容虚弱契约恢复')
-    // await windowsBot.clickMouse(hwnd, 1073, 804, 1);
-    // await windowsBot.sleep(500);
+    console.log('兼容虚弱契约恢复')
+    await windowsBot.clickMouse(hwnd, 634, 463, 1);
+    await windowsBot.sleep(500);
 
-    // await windowsBot.clickMouse(hwnd, 1126, 899, 1);
-    // await windowsBot.sleep(500);
+    await windowsBot.clickMouse(hwnd, 675, 539, 1);
+    await windowsBot.sleep(500);
 
 }
 
@@ -833,6 +835,8 @@ async function thirdRoom(windowsBot){
     }
 
     let time = +new Date()
+    
+
     let result = await utils.doUntilCanNext(windowsBot,hwnd,6000,async ()=>{
         
         await utils.move(windowsBot,keyMap.right,300)
@@ -845,7 +849,7 @@ async function thirdRoom(windowsBot){
             await windowsBot.sendVk(currentRole.map3BackupSk, 1);
             await windowsBot.sleep(1000);
         }
-    })
+    },)
 
     //超时
     if(result === 2){
@@ -1063,6 +1067,10 @@ async function sixRoom(windowsBot){
     await windowsBot.sleep(500);
 
 
+    if(currentRole.sixRoomFix){
+        await utils.move(windowsBot,keyMap.up,100)
+    }
+
     await utils.run(windowsBot,keyMap.right,500)
 
     if(Array.isArray(currentRole.map6Sk)){
@@ -1090,8 +1098,9 @@ async function sixRoom(windowsBot){
     }
 
     let time = +new Date()
-    let result = await utils.doUntilCanNext(windowsBot,hwnd,15000,async ()=>{
+    let result = await utils.doUntilCanNext(windowsBot,hwnd,15000,async (code)=>{
 
+        if(code)
 
         await utils.move(windowsBot,keyMap.right,300)
         await windowsBot.sendVk(keyMap.x, 2);
@@ -1113,6 +1122,9 @@ async function sixRoom(windowsBot){
     }
 
 
+    if(currentRole.sixRoomFix){
+        await utils.move(windowsBot,keyMap.down,100)
+    }
 
     // console.log('往上走')
     // await windowsBot.sendVk(keyMap.up, 2);
@@ -1308,12 +1320,12 @@ async function test(windowsBot) {
 
     console.log('-------startTest--------')
 
-    // await exitToRole(windowsBot)
+    await backTown(windowsBot)
     // await utils.findEnd(windowsBot, hwnd, new Date, 10000)
 
     // await ifNoplOCR(windowsBot)
     // await ifNoplNew(windowsBot)
-    await handleError(windowsBot,'测试错误')
+    // await handleError(windowsBot,'测试错误')
 
     // let endResult = await utils.doUntilEnd(windowsBot,hwnd,5000,async ()=>{
 

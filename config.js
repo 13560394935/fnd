@@ -9,9 +9,9 @@ module.exports = {
     WINDOW_TOP: 0,
     WINDOW_LEFT: 0,
 
-    PLPOS:{
-        x:985,
-        y:778,
+    PLPOS: {
+        x: 985,
+        y: 778,
     },
 
     changeRolePos: { x: 617, y: 675 },
@@ -60,9 +60,9 @@ module.exports = {
             map4BackupSk: keyMap.f,
             map5Sk: [keyMap.e],
             map5BackupSk: keyMap.f,
-            map6Sk: [keyMap.d, keyMap.r],
+            map6Sk: [keyMap.d, keyMap.skip, keyMap.r],
             map6BackupSk: keyMap.f,
-            map7Sks: [keyMap.f, keyMap.t, keyMap.skip, keyMap.skip, keyMap.s, keyMap.a, keyMap.g, keyMap.r],
+            map7Sks: [keyMap.f, keyMap.t, keyMap.skip, keyMap.skip, keyMap.a, keyMap.g, keyMap.r, keyMap.w, keyMap.q],
             runSpeed: 50,
             runFirst: 'right',
         },
@@ -78,7 +78,7 @@ module.exports = {
             map5BackupSk: null,
             map6Sk: [[keyMap.r, keyMap.d]],
             map6BackupSk: null,
-            map7Sks: [keyMap.g, keyMap.t, keyMap.s, [keyMap.e, keyMap.a], [keyMap.e, keyMap.a], [keyMap.e, keyMap.a]],
+            map7Sks: [keyMap.g, keyMap.t, keyMap.skip, keyMap.skip, keyMap.y, keyMap.skip, keyMap.j, keyMap.skip, [keyMap.e, keyMap.a], [keyMap.e, keyMap.a], [keyMap.e, keyMap.a]],
             runSpeed: 50,
             runFirst: 'right',
         },
@@ -113,7 +113,7 @@ module.exports = {
             map7Sks: [keyMap.t, keyMap.skip, keyMap.skip, keyMap.f, keyMap.s, keyMap.d, keyMap.e, keyMap.r, keyMap.ctrl],
             runSpeed: 50,
         },
-        '狂战': {
+        '狂战士': {
             buffs: [keyMap.h],
             map2Sk: [keyMap.s, keyMap.a],
             map2BackupSk: null,
@@ -129,7 +129,7 @@ module.exports = {
             runSpeed: 50,
         },
         '气功': {
-            buffs: [keyMap.h, keyMap.ctrl, keyMap.alt],
+            buffs: [keyMap.h, keyMap.ctrl, keyMap.j],
             map2Sk: [keyMap.a, keyMap.f],
             map2BackupSk: null,
             map3Sk: [keyMap.r, keyMap.q],
@@ -177,7 +177,7 @@ module.exports = {
         },
         '合金战士': {
             buffs: [keyMap.h],
-            map2Sk: [keyMap.s,keyMap.d, keyMap.a],
+            map2Sk: [keyMap.s, keyMap.d, keyMap.a],
             map2BackupSk: null,
             map3Sk: [keyMap.g],
             map3BackupSk: keyMap.q,
@@ -187,7 +187,7 @@ module.exports = {
             map5BackupSk: null,
             map6Sk: [keyMap.e, keyMap.r, keyMap.skip, keyMap.d],
             map6BackupSk: null,
-            map7Sks: [keyMap.s,keyMap.t, keyMap.skip, keyMap.skip, keyMap.e, keyMap.d, keyMap.f, keyMap.r, keyMap.w, keyMap.a, keyMap.s],
+            map7Sks: [keyMap.s, keyMap.t, keyMap.skip, keyMap.skip, keyMap.e, keyMap.d, keyMap.f, keyMap.r, keyMap.w, keyMap.a, keyMap.s],
             runSpeed: 50,
             runFirst: 'right',
         },
@@ -242,7 +242,7 @@ module.exports = {
         id: 12,
         x: 1190,
         y: 533
-    },  {
+    }, {
         id: 13,
         x: 100,
         y: 536,
@@ -403,7 +403,7 @@ module.exports = {
             hasCapsLk: true
         }, {
             id: 11,
-            type: '狂战',
+            type: '狂战士',
             hasCapsLk: true
         }, {
             id: 12,
@@ -421,6 +421,34 @@ module.exports = {
             id: 15,
             type: '合金战士',
             hasCapsLk: true
+        }],
+        4: [{
+            id: 1,
+            type: '狂战士',
+        }, {
+            id: 2,
+            type: '阿修罗',
+        }, {
+            id: 3,
+            type: '剑魂',
+        }, {
+            id: 4,
+            type: '光明骑士',
+        }, {
+            id: 5,
+            type: '气功',
+        }, {
+            id: 6,
+            type: '气功',
+        }, {
+            id: 7,
+            type: '气功',
+        }, {
+            id: 8,
+            type: '刃影',
+        }, {
+            id: 9,
+            type: '旅人',
         }]
     }
 }

@@ -3,7 +3,7 @@ const config = require('./config.js')
 
 
 //点击窗口 聚焦
-exports.focusWindow = async function (windowsBot, hwnd, x = 1051, y = 245) {
+exports.focusWindow = async function (windowsBot, hwnd, x = 81, y = 775) {
 
     await windowsBot.sleep(300)
     await windowsBot.clickMouse(hwnd, x, y, 1)
@@ -106,15 +106,24 @@ exports.runUntilPassRoom = async function (windowsBot, hwnd, direction, timeout 
 
 }
 
-async function doUntilCanNext(windowsBot, hwnd, timeout, func) {
+async function doUntilCanNext(windowsBot, hwnd, timeout, func,cb) {
     console.log('doUntilCanNext')
 
     let code = 0;//0 寻找中 1通过 2错误
     let startTime = +new Date()
 
-    findCanNext(windowsBot, hwnd, startTime, timeout).then((result) => {
-        code = result
-    })
+    //先判断一次 避免一开始就是打完
+    // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\can-next1.png', { sim: 0.8 })
+    // console.log('判断是否打完',res)
+
+    // if(!res){
+        findCanNext(windowsBot, hwnd, startTime, timeout).then((result) => {
+            code = result
+        })
+    // }else{
+    //     code = 1
+    // }
+
 
     while (code === 0) {
         await func()
