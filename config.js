@@ -92,9 +92,9 @@ module.exports = {
             map4BackupSk: null,
             map5Sk: [keyMap.ctrl],
             map5BackupSk: null,
-            map6Sk: [keyMap.q, keyMap.skip, keyMap.f],
+            map6Sk: [ keyMap.g,keyMap.d,keyMap.a],
             map6BackupSk: null,
-            map7Sks: [keyMap.w, keyMap.d, keyMap.t, keyMap.skip, keyMap.skip, keyMap.ctrl, keyMap.d, keyMap.s, keyMap.e, keyMap.f],
+            map7Sks: [keyMap.w, keyMap.f, keyMap.t, keyMap.skip, keyMap.skip, keyMap.ctrl, keyMap.d, keyMap.s, keyMap.e, keyMap.f],
             runSpeed: 50,
             runFirst: 'right',
         },
@@ -134,11 +134,11 @@ module.exports = {
             map2BackupSk: null,
             map3Sk: [keyMap.r, keyMap.q],
             map3BackupSk: null,
-            map4Sk: [keyMap.g, keyMap.skip, keyMap.skip, keyMap.s],
+            map4Sk: [keyMap.w, keyMap.skip, keyMap.s],
             map4BackupSk: null,
             map5Sk: [keyMap.a, keyMap.e],
             map5BackupSk: null,
-            map6Sk: [keyMap.d, keyMap.w, keyMap.s],
+            map6Sk: [keyMap.g, keyMap.s],
             map6BackupSk: null,
             map7Sks: [keyMap.t, keyMap.skip, keyMap.skip, keyMap.y, keyMap.skip, keyMap.a, keyMap.r, keyMap.g, keyMap.e, keyMap.q, keyMap.f],
             runSpeed: 50,
@@ -188,6 +188,54 @@ module.exports = {
             map6Sk: [keyMap.g, keyMap.skip, keyMap.d],
             map6BackupSk: null,
             map7Sks: [keyMap.t, keyMap.skip, keyMap.skip, keyMap.e, keyMap.d,keyMap.s, keyMap.f, keyMap.r, keyMap.w, keyMap.a],
+            runSpeed: 50,
+            runFirst: 'right',
+        },
+        '男光明骑士': {
+            buffs: [keyMap.h],
+            map2Sk: [keyMap.g],
+            map2BackupSk: null,
+            map3Sk: [keyMap.s,keyMap.a,keyMap.w],
+            map3BackupSk: null,
+            map4Sk: [keyMap.y],
+            map4BackupSk: null,
+            map5Sk: [keyMap.d,keyMap.e],
+            map5BackupSk: null,
+            map6Sk: [keyMap.j, keyMap.q,keyMap.w],
+            map6BackupSk: null,
+            map7Sks: [keyMap.s,keyMap.t, keyMap.skip, keyMap.skip, keyMap.d,keyMap.s, keyMap.g, keyMap.w, keyMap.f, keyMap.a],
+            runSpeed: 50,
+            runFirst: 'right',
+        },
+        '召唤师': {
+            buffs: [keyMap.h,keyMap.a],
+            map2Sk: [keyMap.s],
+            map2BackupSk: null,
+            map3Sk: [],
+            map3BackupSk: null,
+            map4Sk: [keyMap.s],
+            map4BackupSk: null,
+            map5Sk: [],
+            map5BackupSk: null,
+            map6Sk: [keyMap.s],
+            map6BackupSk: null,
+            map7Sks: [keyMap.s],
+            runSpeed: 50,
+            runFirst: 'right',
+        },
+        '驭剑士': {
+            buffs: [keyMap.h,keyMap.j],
+            map2Sk: [keyMap.s,keyMap.f],
+            map2BackupSk: null,
+            map3Sk: [keyMap.r,keyMap.e],
+            map3BackupSk: null,
+            map4Sk: [keyMap.a],
+            map4BackupSk: null,
+            map5Sk: [keyMap.d,keyMap.w],
+            map5BackupSk: null,
+            map6Sk: [keyMap.y],
+            map6BackupSk: null,
+            map7Sks: [keyMap.t,keyMap.skip,keyMap.skip,keyMap.s,keyMap.f,],
             runSpeed: 50,
             runFirst: 'right',
         },
@@ -428,6 +476,7 @@ module.exports = {
         }, {
             id: 2,
             type: '阿修罗',
+            hasCapsLk: true
         }, {
             id: 3,
             type: '剑魂',
@@ -440,15 +489,37 @@ module.exports = {
         }, {
             id: 6,
             type: '气功',
-        }, {
+        },{
             id: 7,
-            type: '气功',
+            type: '召唤师',
         }, {
             id: 8,
-            type: '刃影',
+            type: '阿修罗',
         }, {
             id: 9,
+            type: '刃影',
+            hasCapsLk: true
+        }, {
+            id: 10,
             type: '旅人',
+        }, {
+            id: 11,
+            type: '合金战士',
+        }, {
+            id: 12,
+            type: '男光明骑士',
+        }, {
+            id: 13,
+            type: '男光明骑士',
+        }, {
+            id: 14,
+            type: '驭剑士',
+        }, {
+            id: 15,
+            type: '缪斯',
+        }, {
+            id: 16,
+            type: '阿修罗',
         }]
     }
 }

@@ -3,7 +3,7 @@ const config = require('./config.js')
 
 
 //点击窗口 聚焦
-exports.focusWindow = async function (windowsBot, hwnd, x = 81, y = 775) {
+exports.focusWindow = async function (windowsBot, hwnd, x = 30, y = 55) {
 
     await windowsBot.sleep(300)
     await windowsBot.clickMouse(hwnd, x, y, 1)
@@ -183,6 +183,57 @@ async function doUntilPassRoom(windowsBot, hwnd, timeout, func) {
 
 exports.doUntilPassRoom = doUntilPassRoom
 
+exports.doUntilFindImage = doUntilFindImage
+
+async function doUntilFindImage(windowsBot, hwnd,path, timeout, func) {
+    console.log('doUntilFindImage',path)
+    let code = 0; //0 寻找中 1通过 2错误
+
+    let startTime = +new Date()
+
+    //   先判断一次 避免一开始就是
+    let res = await windowsBot.findImage(hwnd, path, { sim: 0.8 })
+    console.log('判断是否找到图片',res)
+
+    if(!res){
+        ifFindImage(windowsBot, hwnd,path, startTime, timeout).then((result) => {
+            code = result
+        })
+    }else{
+        code = 1
+    }
+
+
+  
+
+    while (code === 0) {
+        await func()
+        await windowsBot.sleep(50);
+    }
+
+    return code
+}
+
+async function ifFindImage(windowsBot, hwnd,path, startTime, timeout) {
+
+    let time = +new Date() - startTime
+    console.log('time', time)
+    if (time > timeout) return 2
+
+    //1480 1155
+    let res = await windowsBot.findImage(hwnd, path, { sim: 0.9 })
+    console.log('检测是否找到图片', res)
+    await windowsBot.sleep(100);
+    //#144
+    if (res) {
+        return 1
+    } else {
+        return ifFindImage(windowsBot, hwnd, path, startTime, timeout,path)
+    }
+}
+
+
+    // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\pass-room1.png', { sim: 0.8 })
 
 
 async function ifPassRoom(windowsBot, hwnd, startTime, timeout) {

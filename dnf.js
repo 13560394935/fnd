@@ -2,7 +2,7 @@ const WindowsBot = require('WindowsBot');//引用WindowsBot模块
 const moment = require('moment')
 const utils = require('./utils')
 const keyMap = require('./keyMap.js')
-const config =  require('./config.js');
+const config = require('./config.js');
 // const config = require('./config.json')
 
 const tesseract = require('tesseract.js')
@@ -49,16 +49,16 @@ const DAYS = moment().days()
 
 let plCount = 0
 
-let roles=[{
-    fast:false,
-    level:2
-},{
-    fast:false,
-    level:1
+let roles = [{
+    fast: false,
+    level: 2
+}, {
+    fast: false,
+    level: 1
 }]
 
 // let newRoles=['剑魂','阿修罗']
-let newRoles=[]
+let newRoles = []
 
 
 
@@ -82,7 +82,7 @@ async function windowsMain(windowsBot) {
         let random1 = Math.floor(Math.random() * clickMouseOffset) * (Math.random() > 0.5 ? 1 : -1)
 
 
-        return originClickMouse.call(this, hwnd, x - config.WINDOW_LEFT + random , y - config.WINDOW_TOP  + random1, msg, options)
+        return originClickMouse.call(this, hwnd, x - config.WINDOW_LEFT + random, y - config.WINDOW_TOP + random1, msg, options)
     }
 
 
@@ -93,7 +93,7 @@ async function windowsMain(windowsBot) {
         let random = Math.floor(Math.random() * clickMouseOffset) * (Math.random() > 0.5 ? 1 : -1)
         return originSleep.call(this, ms + random)
     }
-    
+
 
     //设置隐式等待
     await windowsBot.setImplicitTimeout(5000);
@@ -106,7 +106,7 @@ async function windowsMain(windowsBot) {
     let account = args.find(item => item.includes('account'))
 
     if (account) {
-        accountState = account.split('=')[1] 
+        accountState = account.split('=')[1]
         console.log('第几个账号', accountState)
         newRoles = config.ACCOUNT[accountState]
     }
@@ -114,18 +114,18 @@ async function windowsMain(windowsBot) {
     let role = args.find(item => item.includes('role'))
 
     if (role) {
-        roleState = role.split('=')[1] 
+        roleState = role.split('=')[1]
         console.log('从第几个角色开始', roleState)
     }
 
-    
+
 
 
     if (isTest) {
         console.log('--------test---------')
-       await test(windowsBot)
-       return
-    } 
+        await test(windowsBot)
+        return
+    }
 
     await init(windowsBot)
 
@@ -138,7 +138,7 @@ async function windowsMain(windowsBot) {
             // case 0: await enterGame(windowsBot); break;
             case 1: await selectRole(windowsBot); break;
             case 2: await toMap(windowsBot); break;
-            case 3: newVer? await fightingStable(windowsBot) :await fighting(windowsBot); break;
+            case 3: newVer ? await fightingStable(windowsBot) : await fighting(windowsBot); break;
         }
 
     }
@@ -156,9 +156,9 @@ async function init(windowsBot) {
 
     console.log('找到主窗口句柄', hwnd)
 
-    await utils.resetWindow(windowsBot,hwnd)
+    await utils.resetWindow(windowsBot, hwnd)
 
-    await utils.focusWindow(windowsBot,hwnd)
+    await utils.focusWindow(windowsBot, hwnd)
 
 
     // await windowsBot.initOcr(ocrServer, ocrServerPort);
@@ -166,20 +166,20 @@ async function init(windowsBot) {
 }
 
 
-async function selectRole(windowsBot){
+async function selectRole(windowsBot) {
 
-    if(newVer){
-        currentRole =  {...newRoles[roleState - 1],...config.ROLE[newRoles[roleState - 1].type]}
-    }else{
+    if (newVer) {
+        currentRole = { ...newRoles[roleState - 1], ...config.ROLE[newRoles[roleState - 1].type] }
+    } else {
         currentRole = roles[roleState - 1]
     }
-    
+
     currentRole.x = config.ROLE_POS[roleState - 1].x
     currentRole.y = config.ROLE_POS[roleState - 1].y
 
-    console.log('currentRole',currentRole)
+    console.log('currentRole', currentRole)
 
-    if(!currentRole){
+    if (!currentRole) {
         finishAll = true
         process.exit()
     }
@@ -190,12 +190,10 @@ async function selectRole(windowsBot){
 
     console.log('select role ' + roleState)
 
-    if(roleState>=13){
+    if (roleState >= 13) {
         await windowsBot.sendVk(keyMap.down, 1);
         await windowsBot.sleep(200);
-        await windowsBot.sendVk(keyMap.down, 1);
-        await windowsBot.sleep(200);
-    }else{
+    } else {
         await windowsBot.sendVk(keyMap.up, 1);
         await windowsBot.sleep(200);
         await windowsBot.sendVk(keyMap.up, 1);
@@ -212,7 +210,7 @@ async function selectRole(windowsBot){
     // await windowsBot.sendVk(keyMap.space, 1);
     // await windowsBot.sleep(2000);
 
-    
+
     // await utils.resetWindow(windowsBot,hwnd) 
     await windowsBot.sleep(2000);
 
@@ -223,31 +221,31 @@ async function selectRole(windowsBot){
 
 }
 
-async function getCurrentHwnd(windowsBot){
-    let res =  await windowsBot.findWindow(null, config.WINDOW_NAME);
-    console.log('getCurrentHwnd',res)
+async function getCurrentHwnd(windowsBot) {
+    let res = await windowsBot.findWindow(null, config.WINDOW_NAME);
+    console.log('getCurrentHwnd', res)
     return res
 }
 
-async function ifNoplNew(windowsBot){
- 
-    let color =  await windowsBot.getColor(hwnd, utils.getPosX(config.PLPOS.x), utils.getPosY(config.PLPOS.y), false);
+async function ifNoplNew(windowsBot) {
+
+    let color = await windowsBot.getColor(hwnd, utils.getPosX(config.PLPOS.x), utils.getPosY(config.PLPOS.y), false);
     // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\pass-room1.png', { sim: 0.8 })
     console.log('检测是否没疲劳', color)
     await windowsBot.sleep(200);
     // if(!color.startsWith('#d3af00')){ 
 
-    if(!(color.startsWith('#dec') || color.startsWith('#002'))){
+    if (!(color.startsWith('#dec') || color.startsWith('#002'))) {
         console.log('颜色判断没pl了')
         //ocr再次确认
-        let ocrResult= await ifNoplOCR(windowsBot)
-        if(ocrResult){
+        let ocrResult = await ifNoplOCR(windowsBot)
+        if (ocrResult) {
             return true
-        }else{
+        } else {
             console.log('还有疲劳')
             return false
         }
-    }else{
+    } else {
         console.log('还有疲劳')
         return false
     }
@@ -255,11 +253,11 @@ async function ifNoplNew(windowsBot){
 }
 
 
-async function ifNoplOCR(windowsBot){
+async function ifNoplOCR(windowsBot) {
     console.log('检测是否没疲劳OCR')
 
-    const path =  __dirname + '\\images\\screenshot\\plocr.png'
-    
+    const path = __dirname + '\\images\\screenshot\\plocr.png'
+
     //1460, 1195, 1508, 1205
     //1431 1150 1570 1195
 
@@ -269,7 +267,7 @@ async function ifNoplOCR(windowsBot){
     // let y1 = utils.getPosY(1175)
 
 
-    
+
     let x = utils.getPosX(1091)
     let y = utils.getPosY(733)
     let x1 = utils.getPosX(1149)
@@ -283,23 +281,23 @@ async function ifNoplOCR(windowsBot){
     await windowsBot.sleep(500)
 
     //截图保存
-    let saveRes = await windowsBot.saveScreenshot(hwnd, path , {region:[x,y,x1,y1]});
-     console.log('saveRes',saveRes)
-    if(saveRes){
+    let saveRes = await windowsBot.saveScreenshot(hwnd, path, { region: [x, y, x1, y1] });
+    console.log('saveRes', saveRes)
+    if (saveRes) {
         await windowsBot.sleep(100)
         const ret = await ocrWorker.recognize(path);
-        console.log('ocr-result',ret.data.text);
+        console.log('ocr-result', ret.data.text);
 
-        if(ret.data.text){
+        if (ret.data.text) {
             let pl = ret.data.text.split('/')[0]
-            if(pl > 0){
+            if (pl > 0) {
                 console.log('还有疲劳')
                 return false
-            }else{
-                if(pl==0){
+            } else {
+                if (pl == 0) {
                     console.log('OCR确认没pl了')
                     return true
-                }else{
+                } else {
                     return false
                 }
 
@@ -308,28 +306,28 @@ async function ifNoplOCR(windowsBot){
     }
 
     return false
-   
+
 
 }
 
 
-async function toMap(windowsBot){
+async function toMap(windowsBot) {
     console.log('---------tomap--------')
 
     console.log('关闭公告')
     await windowsBot.clickMouse(hwnd, 647, 470, 1);
     await windowsBot.sleep(500);
 
-    let result =  await ifNoplNew(windowsBot)
+    let result = await ifNoplNew(windowsBot)
 
-    if(result){
-        console.log('没疲劳了')        
+    if (result) {
+        console.log('没疲劳了')
         await exitToRole(windowsBot)
         return
     }
 
 
-    console.log('press down',keyMap.down)
+    console.log('press down', keyMap.down)
 
     await windowsBot.sendVk(keyMap.down, 2);
     await windowsBot.sleep(1200);
@@ -337,7 +335,7 @@ async function toMap(windowsBot){
 
     console.log('press right')
 
-    await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right,13000)
+    await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 13000)
 
     // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\invite.png', { sim: 0.8 })
     // console.log('检测是否有人邀请', res)
@@ -355,7 +353,7 @@ async function toMap(windowsBot){
 
     // let res = await windowsBot.findImage(hwnd, __dirname + '\\images\\emeng1.png', { sim: 0.8 })
     // console.log('检测是否海博伦', res)
-    
+
     // if(!res){
     //     await windowsBot.sleep(500);
     //     await windowsBot.sendVk(keyMap.up, 1);
@@ -373,11 +371,11 @@ async function toMap(windowsBot){
 
 }
 
-const operas = [keyMap.a,keyMap.s,keyMap.d,keyMap.f]
-const buff = [keyMap.h,keyMap.r]
+const operas = [keyMap.a, keyMap.s, keyMap.d, keyMap.f]
+const buff = [keyMap.h, keyMap.r]
 
 
-async function sell(windowsBot){
+async function sell(windowsBot) {
     await windowsBot.sleep(500);
     await windowsBot.sendVk(keyMap.a, 1);
     await windowsBot.sleep(500);
@@ -392,32 +390,44 @@ async function sell(windowsBot){
 }
 
 
-async function errorFightAgain(windowsBot){
+async function errorFightAgain(windowsBot) {
 
 }
 
-async function backTown(windowsBot){
+async function backTown(windowsBot) {
 
     console.log('-------返回城镇-------')
 
-    await windowsBot.sleep(1000); 
+    await windowsBot.sleep(1000);
 
-    await windowsBot.sendVk(keyMap.esc, 1);
-    await windowsBot.sleep(500); 
-
-    let color =  await windowsBot.getColor(hwnd, utils.getPosX(769),utils.getPosY(673), false);
-    console.log('backtowncolor',color)
-    if(color!=='#3782a4'){
+    let result = await utils.doUntilFindImage(windowsBot, hwnd, __dirname + '\\images\\backtown.png', 15000, async () => {
         await windowsBot.sendVk(keyMap.esc, 1);
-        await windowsBot.sleep(500); 
-        let color1 =  await windowsBot.getColor(hwnd, utils.getPosX(769),utils.getPosY(673), false);
-        console.log('backtowncolor1',color1)
+        await windowsBot.sleep(500);
+    })
 
-        if(color1!=='#3782a4'){
-            await windowsBot.sendVk(keyMap.esc, 1);
-            await windowsBot.sleep(500); 
+    if(result===2){
+        return {
+            code:2,
+            msg:'没找到回城按钮，或不在战斗中'
         }
     }
+
+    // await windowsBot.sendVk(keyMap.esc, 1);
+    // await windowsBot.sleep(500);
+
+    // let color = await windowsBot.getColor(hwnd, utils.getPosX(769), utils.getPosY(673), false);
+    // console.log('backtowncolor', color)
+    // if (color !== '#3782a4') {
+    //     await windowsBot.sendVk(keyMap.esc, 1);
+    //     await windowsBot.sleep(500);
+    //     let color1 = await windowsBot.getColor(hwnd, utils.getPosX(769), utils.getPosY(673), false);
+    //     console.log('backtowncolor1', color1)
+
+    //     if (color1 !== '#3782a4') {
+    //         await windowsBot.sendVk(keyMap.esc, 1);
+    //         await windowsBot.sleep(500);
+    //     }
+    // }
 
     await windowsBot.clickMouse(hwnd, config.backTownPos.x, config.backTownPos.y, 1);
     await windowsBot.sleep(1000);
@@ -436,18 +446,29 @@ async function backTown(windowsBot){
     await windowsBot.clickMouse(hwnd, 675, 539, 1);
     await windowsBot.sleep(500);
 
+    return 
+
 }
 
-async function exitToRole(windowsBot,isError = false){
+async function exitToRole(windowsBot, isError = false) {
 
     console.log('-------返回选择角色-------')
 
+    let result = await utils.doUntilFindImage(windowsBot, hwnd, __dirname + '\\images\\selectRole.png', 15000, async () => {
+        await windowsBot.sendVk(keyMap.esc, 1);
+        await windowsBot.sleep(500);
+    })
+
+    if(result===2){
+        await sendMsg(windowsBot,'没找到选择角色按钮')
+    }
+
     state = 1
 
-    await windowsBot.sleep(1000); 
+    await windowsBot.sleep(1000);
 
-    await windowsBot.sendVk(keyMap.esc, 1);
-    await windowsBot.sleep(1000); 
+    // await windowsBot.sendVk(keyMap.esc, 1);
+    // await windowsBot.sleep(1000);
 
     await windowsBot.clickMouse(hwnd, config.changeRolePos.x, config.changeRolePos.y, 1);
     await windowsBot.sleep(500);
@@ -456,71 +477,71 @@ async function exitToRole(windowsBot,isError = false){
 
 
 //健壮版战斗
-async function fightingStable(windowsBot){
+async function fightingStable(windowsBot) {
 
-   plCount++
+    plCount++
 
-   await windowsBot.sleep(1000);
+    await windowsBot.sleep(1000);
 
-   let rooms =  [firstRoom,secondRoom,thirdRoom,fourRoom,fiveRoom,sixRoom,sevenRoom]
+    let rooms = [firstRoom, secondRoom, thirdRoom, fourRoom, fiveRoom, sixRoom, sevenRoom]
 
-   let plResult
+    let plResult
 
-   for(let i =0;i<rooms.length;i++){
-        if(i === 6){
+    for (let i = 0; i < rooms.length; i++) {
+        if (i === 6) {
             setTimeout(async () => {
-             plResult =  await ifNoplNew(windowsBot)
+                plResult = await ifNoplNew(windowsBot)
             }, 1000);
         }
-        try{
+        try {
             await rooms[i](windowsBot)
-        } catch(error) {
+        } catch (error) {
             console.log('--------------error---------------')
-            console.log('房间'+ (i+1) + '出错')
+            console.log('房间' + (i + 1) + '出错')
             return
-        }   
-   }
+        }
+    }
 
-   await windowsBot.sleep(1000); 
+    await windowsBot.sleep(1000);
 
     console.log('聚集物品')
 
 
-   if(currentRole.hasCapsLk){
-        console.log('第一次capsLkCount',capsLkCount)
-        if(capsLkCount>=30){
+    if (currentRole.hasCapsLk) {
+        console.log('第一次capsLkCount', capsLkCount)
+        if (capsLkCount >= 30) {
             console.log('capslk时间够了，聚集物品')
-            await windowsBot.sleep(200); 
+            await windowsBot.sleep(200);
             await windowsBot.sendVk(keyMap.capsLk, 1);
             capsLkCount = 0
         }
-   }else{
-         await windowsBot.sendVk(keyMap['/?'], 1);
-   }
+    } else {
+        await windowsBot.sendVk(keyMap['/?'], 1);
+    }
 
- 
 
-    let pass = await utils.doUntilPassRoom(windowsBot,hwnd,5000,async ()=>{
-        await windowsBot.sleep(200); 
+
+    let pass = await utils.doUntilPassRoom(windowsBot, hwnd, 5000, async () => {
+        await windowsBot.sleep(200);
         await windowsBot.sendVk(keyMap.x, 1);
-     })
+    })
 
-     await windowsBot.sendVk(keyMap.x, 1);
-     await windowsBot.sleep(200); 
-     await windowsBot.sendVk(keyMap.x, 1);
-     await windowsBot.sleep(200); 
-     await windowsBot.sendVk(keyMap.x, 1);
-     await windowsBot.sleep(200); 
-     await windowsBot.sendVk(keyMap.x, 1);
-     await windowsBot.sleep(200); 
+    await windowsBot.sendVk(keyMap.x, 1);
+    await windowsBot.sleep(200);
+    await windowsBot.sendVk(keyMap.x, 1);
+    await windowsBot.sleep(200);
+    await windowsBot.sendVk(keyMap.x, 1);
+    await windowsBot.sleep(200);
+    await windowsBot.sendVk(keyMap.x, 1);
+    await windowsBot.sleep(200);
 
     console.log('跳过')
     await windowsBot.sendVk(keyMap.esc, 1);
-    await windowsBot.sleep(2000); 
+    await windowsBot.sleep(2000);
 
-    console.log('plcount',plCount)
+    console.log('plcount', plCount)
 
-    if(plResult || plCount === 9 || plCount === 18 ){
+    if (plResult || plCount === 9 || plCount === 18) {
         await sell(windowsBot)
     }
 
@@ -531,73 +552,73 @@ async function fightingStable(windowsBot){
     await windowsBot.sleep(200);
 
 
-    if(currentRole.hasCapsLk){
-        console.log('capsLkCount',capsLkCount)
-        if(capsLkCount >= 30){
+    if (currentRole.hasCapsLk) {
+        console.log('capsLkCount', capsLkCount)
+        if (capsLkCount >= 30) {
             console.log('capslk聚集物品')
             await windowsBot.sendVk(keyMap.capsLk, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
-        }else if(capsLkCount >15 && capsLkCount < 30){
+            await windowsBot.sleep(100);
+        } else if (capsLkCount > 15 && capsLkCount < 30) {
             let second = (30 - capsLkCount)
-            console.log(second+'秒后'+'capslk聚集物品')
-            await windowsBot.sleep( second * 1000)
+            console.log(second + '秒后' + 'capslk聚集物品')
+            await windowsBot.sleep(second * 1000)
             await windowsBot.sleep(500)
             await windowsBot.sendVk(keyMap.capsLk, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
+            await windowsBot.sleep(100);
             await windowsBot.sendVk(keyMap.x, 1);
-            await windowsBot.sleep(100); 
-        }else{
+            await windowsBot.sleep(100);
+        } else {
             console.log('capslk过了，不需要了')
         }
 
-    }else{
-        await windowsBot.sleep(1000); 
+    } else {
+        await windowsBot.sleep(1000);
     }
 
-    if(plResult){
+    if (plResult) {
         console.log('没疲劳了')
 
         await windowsBot.sendVk(keyMap.f12, 1);
         await windowsBot.sleep(5000);
-        
+
         await exitToRole(windowsBot)
         return
     }
@@ -605,7 +626,7 @@ async function fightingStable(windowsBot){
     await windowsBot.sendVk(keyMap.x, 1);
 
     setTimeout(() => {
-         windowsBot.sendVk(keyMap.x, 1);   
+        windowsBot.sendVk(keyMap.x, 1);
     }, 500);
 
 
@@ -616,77 +637,77 @@ async function fightingStable(windowsBot){
 
 
 
-    
-   let result = await utils.doUntilPassRoom(windowsBot,hwnd,5000,async ()=>{
-       await windowsBot.sleep(300);
+
+    let result = await utils.doUntilPassRoom(windowsBot, hwnd, 5000, async () => {
+        await windowsBot.sleep(300);
         //以防万一，反正按了也没事
-       await windowsBot.sendVk(keyMap.capsLk, 1);
+        await windowsBot.sendVk(keyMap.capsLk, 1);
     })
 
 
 
-    if(result===2){
+    if (result === 2) {
         await windowsBot.sendVk(keyMap.esc, 1);
         await windowsBot.sleep(500);
         await windowsBot.sendVk(keyMap.f10, 1);
-        let resul1t = await utils.doUntilPassRoom(windowsBot,hwnd,5000,async ()=>{
+        let resul1t = await utils.doUntilPassRoom(windowsBot, hwnd, 5000, async () => {
             await windowsBot.sleep(300);
-         })
-     
-         if(resul1t===2){
-            try{
-                 await handleError(windowsBot,'重新战斗过图错误')
-            }catch(e){
+        })
+
+        if (resul1t === 2) {
+            try {
+                await handleError(windowsBot, '重新战斗过图错误')
+            } catch (e) {
                 console.log('重新战斗过图错误')
             }
             return
-         }
+        }
     }
 }
 
 
-async function firstRoom(windowsBot){
-    
+async function firstRoom(windowsBot) {
+
     console.log('-----------普通一图------------')
 
     // let sBuff = utils.suffleArray(currentRole.buffs)
 
-    for(let i =0;i<currentRole.buffs.length;i++){
+    for (let i = 0; i < currentRole.buffs.length; i++) {
         await windowsBot.sendVk(currentRole.buffs[i], 1);
         await windowsBot.sleep(700);
     }
 
-    if(currentRole.runSpeed<=50){
+    if (currentRole.runSpeed <= 50) {
 
         console.log('press up right')
         await windowsBot.sendVk(keyMap.up, 2);
         await windowsBot.sleep(100);
         await windowsBot.sendVk(keyMap.right, 2);
 
-        let pass = await utils.doUntilPassRoom(windowsBot,hwnd,4000,async ()=>{
-            await windowsBot.sleep(200); 
-         })
+        let pass = await utils.doUntilPassRoom(windowsBot, hwnd, 4000, async () => {
+            await windowsBot.sleep(200);
+        })
         console.log('松开右上')
-        
-    
-        await windowsBot.sendVk(keyMap.right, 3);
-        await windowsBot.sendVk(keyMap.up, 3); 
 
-        if(pass ===2){
-            await handleError(windowsBot,'一图过图错误')
+
+        await windowsBot.sendVk(keyMap.right, 3);
+        await windowsBot.sendVk(keyMap.up, 3);
+
+        if (pass === 2) {
+            await handleError(windowsBot, '一图过图错误')
             return
         }
 
-    }else{
+    } else {
 
-        await utils.run(windowsBot,keyMap.right,1000)
+        await utils.run(windowsBot, keyMap.right, 1000)
 
-        await utils.move(windowsBot,keyMap.up,1000)
+        await utils.move(windowsBot, keyMap.up, 1000)
 
-        let pass =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.left,1000)
+        let pass = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.left, 1000)
 
-        if(pass ===2){
-            await handleError(windowsBot,'一图过图错误')
+        if (pass === 2) {
+            await handleError(windowsBot, '一图过图错误')
             return
         }
     }
@@ -697,36 +718,36 @@ async function firstRoom(windowsBot){
 
 
 
-async function secondRoom(windowsBot){
+async function secondRoom(windowsBot) {
 
     console.log('-----------普通二图------------')
     await windowsBot.sleep(500);
     //调整方向
-    await utils.move(windowsBot,keyMap.right,100)
+    await utils.move(windowsBot, keyMap.right, 100)
 
 
-    
+
     await windowsBot.sendVk(keyMap['句号'], 1);
     await windowsBot.sleep(200);
 
     console.log('放E技能')
 
 
-    if(Array.isArray(currentRole.map2Sk)){
-        for(let i=0;i<currentRole.map2Sk.length;i++){
+    if (Array.isArray(currentRole.map2Sk)) {
+        for (let i = 0; i < currentRole.map2Sk.length; i++) {
 
             let skill = currentRole.map2Sk[i]
-            if(Array.isArray(skill)){
-                for(let i = 0;i<skill.length;i++){
+            if (Array.isArray(skill)) {
+                for (let i = 0; i < skill.length; i++) {
                     await windowsBot.sendVk(skill[i], 1);
                     await windowsBot.sleep(500);
                 }
-            }else{
+            } else {
                 await windowsBot.sendVk(skill, 1);
             }
             await windowsBot.sleep(1000);
         }
-    }else{
+    } else {
         await windowsBot.sendVk(currentRole.map2Sk, 1);
         await windowsBot.sleep(500);
     }
@@ -738,16 +759,16 @@ async function secondRoom(windowsBot){
 
     let time = +new Date()
 
-    let result = await utils.doUntilCanNext(windowsBot,hwnd,10000,async ()=>{
+    let result = await utils.doUntilCanNext(windowsBot, hwnd, 10000, async () => {
 
         await windowsBot.sleep(200);
         await windowsBot.sendVk(keyMap.x, 2);
         await windowsBot.sleep(1000);
         await windowsBot.sendVk(keyMap.x, 3);
 
-        if(currentRole.map2BackupSk){
+        if (currentRole.map2BackupSk) {
             //补一个小技能
-            if( + new Date() - time > 2000){
+            if (+ new Date() - time > 2000) {
                 await windowsBot.sendVk(currentRole.map2BackupSk, 1);
                 await windowsBot.sleep(200);
             }
@@ -755,7 +776,7 @@ async function secondRoom(windowsBot){
     })
     await windowsBot.sleep(200);
 
-    if(currentRole.hasCapsLk){
+    if (currentRole.hasCapsLk) {
         console.log('捡东西，开始计时')
         await windowsBot.sendVk(keyMap.capsLk, 1);
         await windowsBot.sleep(200);
@@ -766,24 +787,24 @@ async function secondRoom(windowsBot){
         capsLkCount = 0
 
         let interval = setInterval(() => {
-            capsLkCount ++
+            capsLkCount++
         }, 1000);
 
         setTimeout(() => {
             clearInterval(interval)
-        }, 35000)  ;
+        }, 35000);
     }
 
     //超时
-    if(result === 2){
-        await handleError(windowsBot,'二图打怪错误')
+    if (result === 2) {
+        await handleError(windowsBot, '二图打怪错误')
         return
     }
 
 
-    let passResult =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right)
+    let passResult = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right)
 
-    if(passResult === 2){
+    if (passResult === 2) {
         // utils.run(windowsBot,keyMap.left,500)
         // utils.run(windowsBot,keyMap.right,500)
         console.log('捡东西')
@@ -793,8 +814,8 @@ async function secondRoom(windowsBot){
         await windowsBot.sleep(200);
         await windowsBot.sendVk(keyMap.x, 1);
         await windowsBot.sleep(200);
-        
-        await handleError(windowsBot,'二图过图错误')
+
+        await handleError(windowsBot, '二图过图错误')
     }
 
 }
@@ -802,83 +823,83 @@ async function secondRoom(windowsBot){
 
 
 
-async function thirdRoom(windowsBot){
+async function thirdRoom(windowsBot) {
 
     console.log('-----------普通三图------------')
     await windowsBot.sleep(500);
 
-    await utils.run(windowsBot,keyMap.right,500)
+    await utils.run(windowsBot, keyMap.right, 500)
 
 
-    if(currentRole.threeRoomFix){
-        await utils.run(windowsBot,keyMap.down,100)
+    if (currentRole.threeRoomFix) {
+        await utils.run(windowsBot, keyMap.down, 100)
     }
 
 
-    if(Array.isArray(currentRole.map3Sk)){
-        for(let i=0;i<currentRole.map3Sk.length;i++){
+    if (Array.isArray(currentRole.map3Sk)) {
+        for (let i = 0; i < currentRole.map3Sk.length; i++) {
 
             let skill = currentRole.map3Sk[i]
-            if(Array.isArray(skill)){
-                for(let i = 0;i<skill.length;i++){
+            if (Array.isArray(skill)) {
+                for (let i = 0; i < skill.length; i++) {
                     await windowsBot.sendVk(skill[i], 1);
                     await windowsBot.sleep(500);
                 }
-            }else{
+            } else {
                 await windowsBot.sendVk(skill, 1);
             }
             await windowsBot.sleep(1000);
         }
-    }else{
+    } else {
         await windowsBot.sendVk(currentRole.map3Sk, 1);
         await windowsBot.sleep(500);
     }
 
     let time = +new Date()
-    
 
-    let result = await utils.doUntilCanNext(windowsBot,hwnd,6000,async ()=>{
-        
-        await utils.move(windowsBot,keyMap.right,300)
+
+    let result = await utils.doUntilCanNext(windowsBot, hwnd, 6000, async () => {
+
+        await utils.move(windowsBot, keyMap.right, 300)
         await windowsBot.sendVk(keyMap.x, 2);
         await windowsBot.sleep(500);
         await windowsBot.sendVk(keyMap.x, 3);
 
         //补一个小技能
-        if( + new Date() - time > 3000){
+        if (+ new Date() - time > 3000) {
             await windowsBot.sendVk(currentRole.map3BackupSk, 1);
             await windowsBot.sleep(1000);
         }
     },)
 
     //超时
-    if(result === 2){
+    if (result === 2) {
         currentRole.threeRoomFix = true
-        await handleError(windowsBot,'三图打怪错误')
+        await handleError(windowsBot, '三图打怪错误')
         return
     }
 
 
     //先往上走，再往左走
 
-    let passs,pass,pas,pa;
+    let passs, pass, pas, pa;
 
-     passs = await utils.moveUntilPassRoom(windowsBot,hwnd,keyMap.up,1000)
-    if(passs===2){
-        if(currentRole.runFirst==='right'){
+    passs = await utils.moveUntilPassRoom(windowsBot, hwnd, keyMap.up, 1000)
+    if (passs === 2) {
+        if (currentRole.runFirst === 'right') {
             pass = 2
-        }else{
-            pass =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.left,600)
+        } else {
+            pass = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.left, 600)
         }
-        if(pass===2){
-              pas =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right,800)
-              if(pas === 2){
-                pa = await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.left,3000)
-              }
+        if (pass === 2) {
+            pas = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 800)
+            if (pas === 2) {
+                pa = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.left, 3000)
+            }
         }
     }
 
-    if(pa === 2){
+    if (pa === 2) {
 
         console.log('捡东西')
         await windowsBot.sendVk(keyMap['/?'], 1);
@@ -888,7 +909,7 @@ async function thirdRoom(windowsBot){
         await windowsBot.sendVk(keyMap.x, 1);
         await windowsBot.sleep(200);
 
-        await handleError(windowsBot,'三图过图错误')
+        await handleError(windowsBot, '三图过图错误')
         // utils.run(windowsBot,keyMap.left,500)
         // utils.run(windowsBot,keyMap.right,500)
     }
@@ -897,77 +918,77 @@ async function thirdRoom(windowsBot){
 
 
 
-async function fourRoom(windowsBot){
+async function fourRoom(windowsBot) {
 
     console.log('-----------普通四图------------')
     await windowsBot.sleep(500);
 
-    await utils.move(windowsBot,keyMap.right,100)
+    await utils.move(windowsBot, keyMap.right, 100)
 
 
-    await utils.move(windowsBot,keyMap.up,600)
+    await utils.move(windowsBot, keyMap.up, 600)
 
-    if(Array.isArray(currentRole.map4Sk)){
-        for(let i=0;i<currentRole.map4Sk.length;i++){
+    if (Array.isArray(currentRole.map4Sk)) {
+        for (let i = 0; i < currentRole.map4Sk.length; i++) {
 
             let skill = currentRole.map4Sk[i]
-            if(Array.isArray(skill)){
-                for(let i = 0;i<skill.length;i++){
+            if (Array.isArray(skill)) {
+                for (let i = 0; i < skill.length; i++) {
                     await windowsBot.sendVk(skill[i], 1);
                     await windowsBot.sleep(500);
                 }
-            }else{
+            } else {
                 await windowsBot.sendVk(skill, 1);
             }
             await windowsBot.sleep(1000);
 
         }
-    }else{
+    } else {
         await windowsBot.sendVk(currentRole.map4Sk, 1);
         await windowsBot.sleep(500);
     }
 
     let time = +new Date()
-    let result = await utils.doUntilCanNext(windowsBot,hwnd,10000,async ()=>{
+    let result = await utils.doUntilCanNext(windowsBot, hwnd, 10000, async () => {
 
-        await utils.move(windowsBot,keyMap.right,300)
+        await utils.move(windowsBot, keyMap.right, 300)
         await windowsBot.sendVk(keyMap.x, 2);
         await windowsBot.sleep(500);
         await windowsBot.sendVk(keyMap.x, 3);
 
         //往右走一点 补一个小技能
-        if( + new Date() - time > 2000){
+        if (+ new Date() - time > 2000) {
             await windowsBot.sendVk(currentRole.map4BackupSk, 1);
             await windowsBot.sleep(200);
         }
     })
 
     //超时
-    if(result === 2){
-        await handleError(windowsBot,'四图打怪错误')
+    if (result === 2) {
+        await handleError(windowsBot, '四图打怪错误')
         return
     }
 
     //先往上走，再往左走
 
-    let passs,pass,pas,pa;
+    let passs, pass, pas, pa;
 
-     passs = await utils.moveUntilPassRoom(windowsBot,hwnd,keyMap.up,1000)
-    if(passs===2){
-        if(currentRole.runFirst==='right'){
+    passs = await utils.moveUntilPassRoom(windowsBot, hwnd, keyMap.up, 1000)
+    if (passs === 2) {
+        if (currentRole.runFirst === 'right') {
             pass = 2
-        }else{
-            pass =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.left,600)
+        } else {
+            pass = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.left, 600)
         }
-        if(pass===2){
-              pas =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right,800)
-              if(pas === 2){
-                pa =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.left,3000)
-              }
+        if (pass === 2) {
+            pas = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 800)
+            if (pas === 2) {
+                pa = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.left, 3000)
+            }
         }
     }
 
-    if(pa === 2){
+    if (pa === 2) {
 
         console.log('捡东西')
         await windowsBot.sendVk(keyMap['/?'], 1);
@@ -977,7 +998,7 @@ async function fourRoom(windowsBot){
         await windowsBot.sendVk(keyMap.x, 1);
         await windowsBot.sleep(200);
 
-        await handleError(windowsBot,'四图过图错误')
+        await handleError(windowsBot, '四图过图错误')
         // utils.run(windowsBot,keyMap.left,500)
         // utils.run(windowsBot,keyMap.right,500)
     }
@@ -988,47 +1009,47 @@ async function fourRoom(windowsBot){
 
 
 
-async function fiveRoom(windowsBot){
+async function fiveRoom(windowsBot) {
 
     console.log('-----------普通五图------------')
     await windowsBot.sleep(500);
 
 
-    await utils.move(windowsBot,keyMap.up,700)
-    
-    await utils.move(windowsBot,keyMap.right,100)
+    await utils.move(windowsBot, keyMap.up, 700)
+
+    await utils.move(windowsBot, keyMap.right, 100)
 
 
-    if(Array.isArray(currentRole.map5Sk)){
-        for(let i=0;i<currentRole.map5Sk.length;i++){
+    if (Array.isArray(currentRole.map5Sk)) {
+        for (let i = 0; i < currentRole.map5Sk.length; i++) {
             let skill = currentRole.map5Sk[i]
-            if(Array.isArray(skill)){
-                for(let i = 0;i<skill.length;i++){
+            if (Array.isArray(skill)) {
+                for (let i = 0; i < skill.length; i++) {
                     await windowsBot.sendVk(skill[i], 1);
                     await windowsBot.sleep(500);
                 }
-            }else{
+            } else {
                 await windowsBot.sendVk(skill, 1);
             }
             await windowsBot.sleep(1000);
         }
-    }else{
+    } else {
         await windowsBot.sendVk(currentRole.map5Sk, 1);
         await windowsBot.sleep(500);
-    
+
     }
 
     let time = +new Date()
-    let result = await utils.doUntilCanNext(windowsBot,hwnd,10000,async ()=>{
+    let result = await utils.doUntilCanNext(windowsBot, hwnd, 10000, async () => {
 
 
-        await utils.move(windowsBot,keyMap.right,300)
+        await utils.move(windowsBot, keyMap.right, 300)
         await windowsBot.sendVk(keyMap.x, 2);
         await windowsBot.sleep(500);
         await windowsBot.sendVk(keyMap.x, 3);
 
         //往右走一点 补一个小技能
-        if( + new Date() - time > 2000){
+        if (+ new Date() - time > 2000) {
             await windowsBot.sendVk(currentRole.map5BackupSk, 1);
             await windowsBot.sleep(200);
         }
@@ -1036,14 +1057,14 @@ async function fiveRoom(windowsBot){
     await windowsBot.sleep(200);
 
     //超时
-    if(result === 2){
-        await handleError(windowsBot,'五图打怪错误')
+    if (result === 2) {
+        await handleError(windowsBot, '五图打怪错误')
         return
     }
 
-    let passResult =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right)
+    let passResult = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right)
 
-    if(passResult === 2){
+    if (passResult === 2) {
         // utils.run(windowsBot,keyMap.left,500)
         // utils.run(windowsBot,keyMap.right,500)
 
@@ -1055,60 +1076,60 @@ async function fiveRoom(windowsBot){
         await windowsBot.sendVk(keyMap.x, 1);
         await windowsBot.sleep(200);
 
-        await handleError(windowsBot,'五图过图错误')
+        await handleError(windowsBot, '五图过图错误')
     }
 
 }
 
 
-async function sixRoom(windowsBot){
+async function sixRoom(windowsBot) {
 
     console.log('-----------普通六图------------')
     await windowsBot.sleep(500);
 
 
-    if(currentRole.sixRoomFix){
-        await utils.move(windowsBot,keyMap.up,100)
+    if (currentRole.sixRoomFix) {
+        await utils.move(windowsBot, keyMap.up, 100)
     }
 
-    await utils.run(windowsBot,keyMap.right,500)
+    await utils.run(windowsBot, keyMap.right, 500)
 
-    if(Array.isArray(currentRole.map6Sk)){
-        for(let i=0;i<currentRole.map6Sk.length;i++){
+    if (Array.isArray(currentRole.map6Sk)) {
+        for (let i = 0; i < currentRole.map6Sk.length; i++) {
             let skill = currentRole.map6Sk[i]
-            if(Array.isArray(skill)){
-                for(let i = 0;i<skill.length;i++){
+            if (Array.isArray(skill)) {
+                for (let i = 0; i < skill.length; i++) {
                     await windowsBot.sendVk(skill[i], 1);
                     await windowsBot.sleep(500);
                 }
-            }else{
+            } else {
                 await windowsBot.sendVk(skill, 1);
             }
             await windowsBot.sleep(1000);
         }
-    }else{
+    } else {
         await windowsBot.sendVk(currentRole.map6Sk, 1);
         await windowsBot.sleep(500);
     }
 
     //放3觉，多等一会
-    if(currentRole.map6Sk === keyMap.t){
-        console.log('放3觉，多等一会',currentRole.map6Sk,keyMap.t)
+    if (currentRole.map6Sk === keyMap.t) {
+        console.log('放3觉，多等一会', currentRole.map6Sk, keyMap.t)
         await windowsBot.sleep(4000);
     }
 
     let time = +new Date()
-    let result = await utils.doUntilCanNext(windowsBot,hwnd,15000,async (code)=>{
+    let result = await utils.doUntilCanNext(windowsBot, hwnd, 15000, async (code) => {
 
-        if(code)
+        if (code)
 
-        await utils.move(windowsBot,keyMap.right,300)
+            await utils.move(windowsBot, keyMap.right, 300)
         await windowsBot.sendVk(keyMap.x, 2);
         await windowsBot.sleep(500);
         await windowsBot.sendVk(keyMap.x, 3);
 
         //往右走一点 补一个小技能
-        if( + new Date() - time > 2000){
+        if (+ new Date() - time > 2000) {
             await windowsBot.sendVk(currentRole.map6BackupSk, 1);
             await windowsBot.sleep(200);
         }
@@ -1116,14 +1137,14 @@ async function sixRoom(windowsBot){
     await windowsBot.sleep(200);
 
     //超时
-    if(result === 2){
-        await handleError(windowsBot,'六图打怪错误')
+    if (result === 2) {
+        await handleError(windowsBot, '六图打怪错误')
         return
     }
 
 
-    if(currentRole.sixRoomFix){
-        await utils.move(windowsBot,keyMap.down,100)
+    if (currentRole.sixRoomFix) {
+        await utils.move(windowsBot, keyMap.down, 100)
     }
 
     // console.log('往上走')
@@ -1140,9 +1161,9 @@ async function sixRoom(windowsBot){
 
 
     console.log('捡东西')
-    if(currentRole.hasCapsLk){
+    if (currentRole.hasCapsLk) {
         await windowsBot.sendVk(keyMap['/?'], 1);
-    }else{
+    } else {
         await windowsBot.sendVk(keyMap.capsLk, 1);
     }
 
@@ -1152,34 +1173,34 @@ async function sixRoom(windowsBot){
     await windowsBot.sendVk(keyMap.x, 1);
     await windowsBot.sleep(200);
 
-    
 
-    let passResult 
-    if(currentRole.sixRoomFix){
-        let passRe = await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right,500)
 
-        if(passRe===2){
-            await utils.run(windowsBot,keyMap.up,100)
-            passResult = await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right,4000)
+    let passResult
+    if (currentRole.sixRoomFix) {
+        let passRe = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 500)
+
+        if (passRe === 2) {
+            await utils.run(windowsBot, keyMap.up, 100)
+            passResult = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 4000)
         }
 
-    }else{
-        passResult = await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right)
+    } else {
+        passResult = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right)
     }
 
 
-    if(passResult === 2){
+    if (passResult === 2) {
 
-        await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.left,500)
+        await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.left, 500)
 
-        await utils.move(windowsBot,keyMap.up,200)
+        await utils.move(windowsBot, keyMap.up, 200)
 
-        let fixResult = await utils.moveUntilPassRoom(windowsBot,hwnd,keyMap.right)
-        
-        if(fixResult ===1){
+        let fixResult = await utils.moveUntilPassRoom(windowsBot, hwnd, keyMap.right)
+
+        if (fixResult === 1) {
             currentRole.sixRoomFix = true
-        }else{
-            await handleError(windowsBot,'六图过图错误')
+        } else {
+            await handleError(windowsBot, '六图过图错误')
             return
         }
     }
@@ -1187,24 +1208,24 @@ async function sixRoom(windowsBot){
 }
 
 
-async function sevenRoom(windowsBot){
+async function sevenRoom(windowsBot) {
 
     console.log('-----------普通七图------------')
     await windowsBot.sleep(500);
 
-    await utils.run(windowsBot,keyMap.right,300)
+    await utils.run(windowsBot, keyMap.right, 300)
 
     let skills = [...currentRole.map7Sks]
 
-    let endResult = await utils.doUntilEnd(windowsBot,hwnd,40000,async ()=>{
+    let endResult = await utils.doUntilEnd(windowsBot, hwnd, 40000, async () => {
         let skill = skills.shift()
-        if(skill){
-            if(Array.isArray(skill)){
-                for(let i = 0;i<skill.length;i++){
+        if (skill) {
+            if (Array.isArray(skill)) {
+                for (let i = 0; i < skill.length; i++) {
                     await windowsBot.sendVk(skill[i], 1);
                     await windowsBot.sleep(500);
                 }
-            }else{
+            } else {
                 await windowsBot.sendVk(skill, 1);
                 await windowsBot.sleep(200);
                 await windowsBot.sendVk(skill, 1);
@@ -1214,7 +1235,7 @@ async function sevenRoom(windowsBot){
             await windowsBot.sleep(2000);
             await windowsBot.sendVk(keyMap.x, 3);
             await windowsBot.sleep(300);
-        }else{
+        } else {
             await windowsBot.sendVk(keyMap.x, 2);
             await windowsBot.sleep(2000);
             await windowsBot.sendVk(keyMap.x, 3);
@@ -1223,30 +1244,22 @@ async function sevenRoom(windowsBot){
     })
 
     //超时
-    if(endResult === 2){
+    if (endResult === 2) {
         console.log('boss error')
-        await handleError(windowsBot,'七图boss超时')
+        await handleError(windowsBot, '七图boss超时')
         return
     }
 
 }
 
 
-
-
-
-async function handleError(windowsBot,msg){
-    console.log('错误了回城重进')
-    await windowsBot.sleep(1000); 
-
-    await backTown(windowsBot)
-
+async function sendMsg(windowsBot,msg){
     await windowsBot.setClipboardText(currentRole.type + currentRole.id + ':' + msg);
 
     console.log('向QQ发送通知出错了');
-    if(!qqhwnd){
+    if (!qqhwnd) {
         qqhwnd = await windowsBot.findWindow(null, '朝日');
-        console.log('qqhwnd',qqhwnd)
+        console.log('qqhwnd', qqhwnd)
         await windowsBot.sleep(500);
     }
 
@@ -1271,56 +1284,79 @@ async function handleError(windowsBot,msg){
 
     await windowsBot.sendVk(keyMap.enter, 1);
     await windowsBot.sleep(200);
-  
+
     await windowsBot.setClipboardText('');
 
-    await utils.focusWindow(windowsBot,hwnd)
+    await utils.focusWindow(windowsBot, hwnd)
     await windowsBot.sleep(500);
+}
 
 
+async function handleError(windowsBot, msg) {
+    console.log('错误了回城重进')
+    await windowsBot.sleep(1000);
 
-    await utils.move(windowsBot,keyMap.left,1000)
+    let result= await backTown(windowsBot)
 
-    let passResult =  await utils.runUntilPassRoom(windowsBot,hwnd,keyMap.right,3000)
 
-    if(passResult===2){
-        roleState --
+    //没成功回城 返回角色
+    if(result && result.code ===2){
+        msg = result.msg
+
+        await sendMsg(windowsBot,msg)
+        
+        roleState--
         await exitToRole(windowsBot)
+
+    
+    }else{
+
+
+        await sendMsg(windowsBot,msg)
+
+        await utils.move(windowsBot, keyMap.left, 1000)
+
+        let passResult = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 3000)
+    
+        if (passResult === 2) {
+            roleState--
+            await exitToRole(windowsBot)
+    
+        }
+    
+        console.log('select map haibolun')
+        await windowsBot.sleep(1000);
+    
+        await windowsBot.clickMouse(hwnd, 526, 318, 1);
+        await windowsBot.sleep(500);
+    
+    
+        console.log('进图');
+    
+        await windowsBot.clickMouse(hwnd, 526, 318, 1);
+        await windowsBot.sleep(2000);
 
     }
 
-    console.log('select map haibolun')
-    await windowsBot.sleep(1000);
-
-    await windowsBot.clickMouse(hwnd, 526, 318, 1);
-    await windowsBot.sleep(500);
-
-
-    console.log('进图');
-
-    await windowsBot.clickMouse(hwnd, 526, 318, 1);
-    await windowsBot.sleep(2000);
-
-
-
-
-
     //用于外部调用捕获 不再执行接下来的代码
-    throw new Error('战斗出错')
+    throw new Error('出现错误')
 }
 
 async function test(windowsBot) {
-    
+
     await windowsBot.sleep(500)
     await init(windowsBot)
 
     await windowsBot.sleep(500)
-    await  utils.focusWindow(windowsBot,hwnd)
+    await utils.focusWindow(windowsBot, hwnd)
     await windowsBot.sleep(500)
 
     console.log('-------startTest--------')
 
-    await backTown(windowsBot)
+    // await backTown(windowsBot)
+    // await exitToRole(windowsBot)
+    await handleError(windowsBot,'test')
+    
     // await utils.findEnd(windowsBot, hwnd, new Date, 10000)
 
     // await ifNoplOCR(windowsBot)
@@ -1352,8 +1388,8 @@ async function test(windowsBot) {
 }
 
 
-async function autoDecompose(windowsBot){
-   
+async function autoDecompose(windowsBot) {
+
 }
 
 
