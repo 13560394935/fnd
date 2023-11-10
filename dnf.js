@@ -169,7 +169,7 @@ async function init(windowsBot) {
 async function selectRole(windowsBot) {
 
     if (newVer) {
-        currentRole = { ...newRoles[roleState - 1], ...config.ROLE[newRoles[roleState - 1].type] }
+        currentRole = { ...newRoles[roleState - 1], ...config.ROLE[newRoles[roleState - 1].type], errorTime: 0 }
     } else {
         currentRole = roles[roleState - 1]
     }
@@ -311,6 +311,45 @@ async function ifNoplOCR(windowsBot) {
 }
 
 
+async function fenjieEquip(windowsBot,pos){
+    console.log('分解装备')
+    await windowsBot.sendVk(keyMap.i, 1);    
+    await windowsBot.sleep(500);
+
+    console.log('整理装备')
+    await windowsBot.clickMouse(hwnd, 1045, 677, 1);
+    await windowsBot.sleep(500);
+
+    await windowsBot.sendVk(keyMap.i, 1);    
+    await windowsBot.sleep(500);
+
+    console.log('点击商店')
+
+    await windowsBot.clickMouse(hwnd, pos.x, pos.y, 1);
+    await windowsBot.sleep(500);
+
+    await windowsBot.clickMouse(hwnd, pos.x + 50, pos.y + 70, 1);
+    await windowsBot.sleep(500);
+
+
+    for(let i = 0;i<8;i++){
+        await windowsBot.clickMouse(hwnd, 756 + i * 42, 394, 1);
+        await windowsBot.sleep(500);
+    }
+
+    await windowsBot.clickMouse(hwnd, 535, 530, 1);
+    await windowsBot.sleep(500);
+
+
+    await windowsBot.clickMouse(hwnd, 535 - 73, 530, 1);
+    await windowsBot.sleep(500);
+
+    await windowsBot.sleep(3000);
+
+    await windowsBot.sendVk(keyMap.esc,1);
+
+}
+
 async function toMap(windowsBot) {
     console.log('---------tomap--------')
 
@@ -330,10 +369,25 @@ async function toMap(windowsBot) {
     console.log('press down', keyMap.down)
 
     await windowsBot.sendVk(keyMap.down, 2);
-    await windowsBot.sleep(1200);
+    await windowsBot.sleep(1500);
     await windowsBot.sendVk(keyMap.down, 3);
 
     console.log('press right')
+
+    await windowsBot.sendVk(keyMap.right, 2);
+
+    let fenjie = await utils.doUntilFindImage(windowsBot, hwnd, __dirname + '\\images\\fenjie.png', 8000, async () => {
+        await windowsBot.sleep(200);
+    })
+
+    await windowsBot.sendVk(keyMap.right, 3);    
+
+    console.log('fenjie',fenjie)
+
+    if(fenjie){
+        await fenjieEquip(windowsBot,fenjie[0])
+    }
+
 
     await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 13000)
 
@@ -405,10 +459,10 @@ async function backTown(windowsBot) {
         await windowsBot.sleep(500);
     })
 
-    if(result===2){
+    if (result === 2) {
         return {
-            code:2,
-            msg:'没找到回城按钮，或不在战斗中'
+            code: 2,
+            msg: '没找到回城按钮，或不在战斗中'
         }
     }
 
@@ -446,7 +500,7 @@ async function backTown(windowsBot) {
     await windowsBot.clickMouse(hwnd, 675, 539, 1);
     await windowsBot.sleep(500);
 
-    return 
+    return
 
 }
 
@@ -459,8 +513,8 @@ async function exitToRole(windowsBot, isError = false) {
         await windowsBot.sleep(500);
     })
 
-    if(result===2){
-        await sendMsg(windowsBot,'没找到选择角色按钮')
+    if (result === 2) {
+        await sendMsg(windowsBot, '没找到选择角色按钮')
     }
 
     state = 1
@@ -1253,8 +1307,8 @@ async function sevenRoom(windowsBot) {
 }
 
 
-async function sendMsg(windowsBot,msg){
-    await windowsBot.setClipboardText(currentRole.type + currentRole.id + ':' + msg);
+async function sendMsg(windowsBot, msg) {
+    await windowsBot.setClipboardText(currentRole.type + currentRole.id + ':' + msg + ',次数' + currentRole.errorTime);
 
     console.log('向QQ发送通知出错了');
     if (!qqhwnd) {
@@ -1293,49 +1347,70 @@ async function sendMsg(windowsBot,msg){
 
 
 async function handleError(windowsBot, msg) {
+
+
+    currentRole.errorTime++
+
     console.log('错误了回城重进')
     await windowsBot.sleep(1000);
 
-    let result= await backTown(windowsBot)
+    let result = await backTown(windowsBot)
 
 
     //没成功回城 返回角色
-    if(result && result.code ===2){
+    if (result && result.code === 2) {
         msg = result.msg
 
-        await sendMsg(windowsBot,msg)
-        
-        roleState--
+        await sendMsg(windowsBot, msg)
+
+
+
+        if (currentRole.errorTime < 10) {
+            roleState--
+        }
         await exitToRole(windowsBot)
 
-    
-    }else{
+
+    } else {
 
 
-        await sendMsg(windowsBot,msg)
+        await sendMsg(windowsBot, msg)
 
-        await utils.move(windowsBot, keyMap.left, 1000)
 
-        let passResult = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 3000)
-    
-        if (passResult === 2) {
-            roleState--
+        let plResult = await ifNoplNew(windowsBot)
+
+        if (plResult) {
+            console.log('没疲劳了')
             await exitToRole(windowsBot)
+        }else{
+
+            //重新进图
+            await utils.move(windowsBot, keyMap.left, 1000)
+
+            let passResult = await utils.runUntilPassRoom(windowsBot, hwnd, keyMap.right, 3000)
+    
+            if (passResult === 2) {
+    
+                if (currentRole.errorTime < 10) {
+                    roleState--
+                }
+                await exitToRole(windowsBot)
+    
+            }
+    
+            console.log('select map haibolun')
+            await windowsBot.sleep(1000);
+    
+            await windowsBot.clickMouse(hwnd, 526, 318, 1);
+            await windowsBot.sleep(500);
+    
+    
+            console.log('进图');
+    
+            await windowsBot.clickMouse(hwnd, 526, 318, 1);
+            await windowsBot.sleep(2000);
     
         }
-    
-        console.log('select map haibolun')
-        await windowsBot.sleep(1000);
-    
-        await windowsBot.clickMouse(hwnd, 526, 318, 1);
-        await windowsBot.sleep(500);
-    
-    
-        console.log('进图');
-    
-        await windowsBot.clickMouse(hwnd, 526, 318, 1);
-        await windowsBot.sleep(2000);
-
     }
 
     //用于外部调用捕获 不再执行接下来的代码
@@ -1355,8 +1430,9 @@ async function test(windowsBot) {
 
     // await backTown(windowsBot)
     // await exitToRole(windowsBot)
-    await handleError(windowsBot,'test')
-    
+    // await handleError(windowsBot, 'test')
+    await toMap(windowsBot)
+
     // await utils.findEnd(windowsBot, hwnd, new Date, 10000)
 
     // await ifNoplOCR(windowsBot)

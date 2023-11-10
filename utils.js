@@ -200,7 +200,7 @@ async function doUntilFindImage(windowsBot, hwnd,path, timeout, func) {
             code = result
         })
     }else{
-        code = 1
+        return res
     }
 
 
