@@ -226,7 +226,7 @@ async function ifFindImage(windowsBot, hwnd,path, startTime, timeout) {
     await windowsBot.sleep(100);
     //#144
     if (res) {
-        return 1
+        return res
     } else {
         return ifFindImage(windowsBot, hwnd, path, startTime, timeout,path)
     }
